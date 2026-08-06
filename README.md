@@ -66,7 +66,7 @@ mvn exec:java -Dexec.mainClass="edu.unisabana.pizzafactory.consoleview.Preparado
 mvn compile
 ```
 
-Nota: Si lo desea, puede revisar una [implementación de referencia del patrón Fábrica Abstracta](https://github.com/CesarAVegaF312/DYAS-GoF-FactoryMethod-ReferenceExample.git ) (el nombre del repositorio dice "FactoryMethod" por razones históricas, pero el patrón implementado es Fábrica Abstracta), cuyo modelo corresponde al del siguiente diagrama ![](BasicExample.png)
+Nota: Si lo desea, puede revisar una [implementación de referencia del patrón Factory Method](https://github.com/CesarAVegaF312/DYAS-GoF-FactoryMethod-ReferenceExample.git ) (patrón emparentado y más simple que Fábrica Abstracta: un solo producto, una sola fábrica). El modelo que debe plantear para este ejercicio es el de Fábrica Abstracta propiamente dicho, como el del siguiente diagrama ![](BasicExample.png)
 
 
 #### Parte II. Refactoring de código ‘real’.
