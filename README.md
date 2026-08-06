@@ -13,20 +13,20 @@ El siguiente, es un modelo de clases de una aplicación que se comunica con un m
 El programa principal del micro-controlador utiliza la siguiente función, la cual depende de las clases antes mostradas:
 
 ```Java
-public void prepararPizza(Ingredientes[] ingredientes, Tamano tam) 
+public void prepararPizza(Ingrediente[] ingredientes, Tamano tam) 
 throws ExcepcionParametrosInvalidos{
 	AmasadorPizzaDelgada am=new AmasadorPizzaDelgada();
 	HorneadorPizzaDelgada hpd=new HorneadorPizzaDelgada();
 	MoldeadorPizzaDelgada mp=new MoldeadorPizzaDelgada();
 	am.amasar();
-	if (tam == Tamano.PEQUENA){
+	if (tam == Tamano.PEQUENO){
 		mp.moldearPizzaPequena();
 	}
-	else if(tam==Tamano.MEDIANA){
+	else if(tam==Tamano.MEDIANO){
 		mp.molderarPizzaMediana();
 	}
 	else{
-		throw new ExcepcionParametrosInvalidos (“Tamano de piza invalido:”+tam);
+		throw new ExcepcionParametrosInvalidos ("Tamano de piza invalido:"+tam);
 	}
 		aplicarIngredientes(ingredientes);
 		hpd.hornear();
@@ -44,6 +44,8 @@ Es importante tener en cuenta que para dichas variantes, aunque la secuencia de 
 Dado que es posible que en el futuro salgan variantes adicionales de esta máquina, y que se sabe que la secuencia de pasos en general NO cambiará, se le ha pedido que el software quede escrito de manera que la lógica básica no requiera cambios, independientemente de cómo se amase, como se hornee y cómo se moldee en dichas variantes.
 
 1.	Teniendo esto en cuenta, y considerando el patrón de fábrica abstracta, plantee el modelo de clases que permitiría desacoplar la lógica de la fabricación de pizzas, de las diferentes manera como se pueden realizar las actividades de bajo nivel relacionadas (cocción, corte, etc.).
+
+	Nota: en el proyecto de la Parte I ya encontrará `AmasadorPizza` (interfaz) y `AmasadorPizzaGruesa` (implementación) resueltos a manera de ejemplo guía. Úselos como referencia para crear las interfaces y clases equivalentes de `Horneador` y `Moldeador` (y para la variante de masa integral), en vez de asumir que ya están completos.
 
 2.	Descargue el proyecto mediante el comando git (git clone) :
 ```
@@ -64,7 +66,7 @@ mvn exec:java -Dexec.mainClass="edu.unisabana.pizzafactory.consoleview.Preparado
 mvn compile
 ```
 
-Nota: Si lo desea, puede revisar una [implementación de referencia del patrón Fábrica Abstracta](https://github.com/CesarAVegaF312/DYAS-GoF-FactoryMethod-ReferenceExample.git ), cuyo modelo corresponde al del siguiente diagrama ![](BasicExample.png)
+Nota: Si lo desea, puede revisar una [implementación de referencia del patrón Fábrica Abstracta](https://github.com/CesarAVegaF312/DYAS-GoF-FactoryMethod-ReferenceExample.git ) (el nombre del repositorio dice "FactoryMethod" por razones históricas, pero el patrón implementado es Fábrica Abstracta), cuyo modelo corresponde al del siguiente diagrama ![](BasicExample.png)
 
 
 #### Parte II. Refactoring de código ‘real’.
@@ -106,6 +108,8 @@ Una vez hecho lo anterior, valide que se da el desacoplamiento: en ninguna parte
 #### Criterios de evaluación
 
 1. Parte I.
+	* Diseño.
+		1. `PreparadorPizza` no debe referenciar directamente ninguna clase concreta de Amasador/Horneador/Moldeador (sólo la fábrica abstracta y los productos abstractos).
 	* Funcional. 
 		1. El preparador de pizzas cambia su comportamiento al cambiar la configuración de la fábrica abstracta.
 
