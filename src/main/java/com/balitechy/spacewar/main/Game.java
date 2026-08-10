@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 import javax.swing.JFrame;
 
@@ -22,40 +21,35 @@ public class Game extends Canvas implements Runnable {
 	private Thread thread;
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	
-	
-	private SpritesImageLoader sprites;
-	
-	//Game components
+	// Game components
 	private Player player;
 	private BulletController bullets;
-	private BackgroundRenderer backgRenderer;
 	
+	// Atributos del Patrón Abstract Factory
+	private GameFactory factory;
+	private PlayerRenderer playerRenderer;
+	private BulletRenderer bulletRenderer;
+	private BackgroundRenderer backgRenderer;
 	
 	public void init(){
 		requestFocus();
 		
-		
-		sprites = new SpritesImageLoader("/sprites.png");
-		try {			
-			sprites.loadImage();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 		// Add keyboard listener
 		addKeyListener(new InputHandler(this));
 		
-		// Initialize game components.
+		// 1. Elegir la fábrica concreta para el estilo deseado
+		factory = new SpriteGameFactory();
+		// factory = new VectorGameFactory();
+		// factory = new ColorfulVectorGameFactory();
 		
+		// 2. Crear las instancias de los renderizadores usando la fábrica
+		playerRenderer = factory.createPlayerRenderer();
+		bulletRenderer = factory.createBulletRenderer();
+		backgRenderer = factory.createBackgroundRenderer();
 		
-		// Set player position at the bottom center.
+		// Initialize game components
 		player = new Player((WIDTH * SCALE - Player.WIDTH) / 2, HEIGHT * SCALE - 50 , this);
 		bullets = new BulletController();
-		backgRenderer=new BackgroundRenderer();
-	}
-
-	public SpritesImageLoader getSprites(){
-		return sprites;
 	}
 	
 	public BulletController getBullets(){
@@ -177,7 +171,7 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	/*
-	 * Render overall game components.
+	 * Render overall game components using Abstract Factory renderers.
 	 */
 	public void render(){
 		BufferStrategy bs = this.getBufferStrategy();
@@ -187,21 +181,12 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		Graphics g = bs.getDrawGraphics();
-		/////////////////////////////////
 		
-		try {
-			backgRenderer.render(g, this);
-			player.render(g);
-			bullets.render(g);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// Inyección de renderizadores
+		backgRenderer.render(g, this);
+		player.render(g, playerRenderer);
+		bullets.render(g, bulletRenderer);
 		
-		
-		
-		
-		////////////////////////////////
 		g.dispose();
 		bs.show();
 	}

@@ -16,9 +16,10 @@ public class BulletController {
 		}
 	}
 	
-	public void render(Graphics g){
+	// Recibe el renderer abstracto y se lo pasa a cada objeto Bullet
+	public void render(Graphics g, BulletRenderer renderer){
 		for(int i=0; i < bl.size(); i++){
-			bl.get(i).render(g);
+			bl.get(i).render(g, renderer);
 		}
 	}
 	
